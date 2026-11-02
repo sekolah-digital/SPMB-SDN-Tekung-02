@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Jalur Online - SDN TEKUNG 02</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --bg-color: #f0fdf4;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        h2 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .section-title {
+            background-color: #f0fdf4;
+            color: var(--primary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin: 25px 0 15px 0;
+            font-size: 15px;
+            border-left: 4px solid var(--primary);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+        label span {
+            color: #ef4444;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+        }
+        .submit-btn, .download-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        .submit-btn:hover, .download-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Style Kartu Bukti */
+        #successSection {
+            display: none;
+            text-align: center;
+        }
+        .card-bukti {
+            background: #ffffff;
+            border: 2px dashed var(--primary);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .card-bukti h3 {
+            color: var(--primary);
+            text-align: center;
+            margin-top: 0;
+            border-bottom: 2px solid #f0fdf4;
+            padding-bottom: 10px;
+        }
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+        .card-label {
+            font-weight: 600;
+            color: #4b5563;
+        }
+        .qr-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .info-teks {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .back-home {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>SDN TEKUNG 02</h2>
+    <div class="subtitle">Formulir Pendaftaran Jalur Online TP 2027/2028</div>
+
+    <!-- FORMULIR -->
+    <form id="indenForm">
+        <div class="section-title"><i class="fa-solid fa-user"></i> DATA SISWA</div>
+        
+        <div class="form-group">
+            <label>1. Nama Lengkap Siswa <span>*</span></label>
+            <input type="text" id="nama" name="nama" placeholder="Sesuai Akte Kelahiran" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>2. Jenis Kelamin <span>*</span></label>
+                <select id="gender" name="gender" required>
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>4. NIK Siswa (16 Angka) <span>*</span></label>
+                <input type="text" id="nikSiswa" name="nikSiswa" placeholder="Sesuai KK / Akte" maxlength="16" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>3a. Tempat Lahir <span>*</span></label>
+                <input type="text" id="tempatLahir" name="tempatLahir" placeholder="Kota Kelahiran" required>
+            </div>
+            <div class="form-group">
+                <label>3b. Tanggal Lahir <span>*</span></label>
+                <input type="date" id="tanggalLahir" name="tanggalLahir" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>5. Asal Sekolah (KB / TK / RA) <span>*</span></label>
+                <input type="text" id="asalSekolah" name="asalSekolah" placeholder="Nama Lembaga Asal / Belum Sekolah" required>
+            </div>
+            <div class="form-group">
+                <label>6. Nomor WhatsApp Orang Tua <span>*</span></label>
+                <input type="tel" id="wa" name="wa" placeholder="Contoh: 081234567890" required>
+            </div>
+        </div>
+
+        <div class="section-title"><i class="fa-solid fa-users"></i> DATA KELUARGA & WALI</div>
+
+        <div class="form-group">
+            <label>7. Nomor Kartu Keluarga (KK) <span>*</span></label>
+            <input type="text" id="noKk" name="noKk" placeholder="16 Digit Nomor KK" maxlength="16" required>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>8a. Nama Ayah Kandung <span>*</span></label>
+                <input type="text" id="namaAyah" name="namaAyah" placeholder="Nama Lengkap Ayah" required>
+            </div>
+            <div class="form-group">
+                <label>8b. NIK Ayah <span>*</span></label>
+                <input type="text" id="nikAyah" name="nikAyah" placeholder="16 Digit NIK Ayah" maxlength="16" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>9a. Nama Ibu Kandung <span>*</span></label>
+                <input type="text" id="namaIbu" name="namaIbu" placeholder="Nama Lengkap Ibu" required>
+            </div>
+            <div class="form-group">
+                <label>9b. NIK Ibu <span>*</span></label>
+                <input type="text" id="nikIbu" name="nikIbu" placeholder="16 Digit NIK Ibu" maxlength="16" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>10a. Nama Wali (Opsional / Jika Yatim Piatu)</label>
+                <input type="text" id="namaWali" name="namaWali" placeholder="Nama Wali (Kosongkan jika ada orang tua)">
+            </div>
+            <div class="form-group">
+                <label>10b. NIK Wali (Opsional)</label>
+                <input type="text" id="nikWali" name="nikWali" placeholder="16 Digit NIK Wali" maxlength="16">
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+            <i class="fa-solid fa-paper-plane"></i> Kirim Pendaftaran
+        </button>
+    </form>
+
+    <!-- SECTION KARTU BUKTI -->
+    <div id="successSection">
+        <div style="background: #d1fae5; color: #065f46; padding: 12px; border-radius: 8px; margin-bottom: 20px; font-weight: 600;">
+            <i class="fa-solid fa-circle-check"></i> Pendaftaran Berhasil & Masuk ke Sistem!
+        </div>
+
+        <div id="captureCard" class="card-bukti">
+            <h3>BUKTI PENDAFTARAN ONLINE</h3>
+            <div class="card-row"><span class="card-label">Status:</span><span style="color: #0d9488; font-weight: bold;">BERHASIL TERDAFTAR</span></div>
+            <div class="card-row"><span class="card-label">Nama Siswa:</span><span id="resNama">-</span></div>
+            <div class="card-row"><span class="card-label">Jenis Kelamin:</span><span id="resGender">-</span></div>
+            <div class="card-row"><span class="card-label">TTL:</span><span id="resTtl">-</span></div>
+            <div class="card-row"><span class="card-label">NIK Siswa:</span><span id="resNikSiswa">-</span></div>
+            <div class="card-row"><span class="card-label">Asal Sekolah:</span><span id="resAsalSekolah">-</span></div>
+            <div class="card-row"><span class="card-label">No KK:</span><span id="resNoKk">-</span></div>
+            <div class="card-row"><span class="card-label">Ayah / NIK:</span><span id="resAyah">-</span></div>
+            <div class="card-row"><span class="card-label">Ibu / NIK:</span><span id="resIbu">-</span></div>
+            <div class="card-row"><span class="card-label">Wali / NIK:</span><span id="resWali">-</span></div>
+            <div class="card-row"><span class="card-label">No WhatsApp:</span><span id="resWa">-</span></div>
+
+            <div class="qr-container">
+                <div id="qrcode"></div>
+            </div>
+            <div class="info-teks">Scan QR Code untuk cek status di halaman resmi</div>
+        </div>
+
+        <button type="button" class="download-btn" id="downloadBtn">
+            <i class="fa-solid fa-download"></i> Download Bukti Pendaftaran (Gambar)
+        </button>
+        
+        <br>
+        <a href="index.html" class="back-home"><i class="fa-solid fa-house"></i> Kembali ke Beranda Utama</a>
+    </div>
+</div>
+
+<script>
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwuKlypGoI7-ZGdrPApWDwR8MLwMGtZ54aLjtZgQ4Q9NIYNfjTGLV_7sv9aGjUZWpzS/exec';
+
+    const form = document.getElementById('indenForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successSection = document.getElementById('successSection');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim Data...';
+
+        const formData = {
+            nama: document.getElementById('nama').value,
+            gender: document.getElementById('gender').value,
+            tempatLahir: document.getElementById('tempatLahir').value,
+            tanggalLahir: document.getElementById('tanggalLahir').value,
+            nikSiswa: document.getElementById('nikSiswa').value,
+            asalSekolah: document.getElementById('asalSekolah').value,
+            wa: document.getElementById('wa').value,
+            noKk: document.getElementById('noKk').value,
+            namaAyah: document.getElementById('namaAyah').value,
+            nikAyah: document.getElementById('nikAyah').value,
+            namaIbu: document.getElementById('namaIbu').value,
+            nikIbu: document.getElementById('nikIbu').value,
+            namaWali: document.getElementById('namaWali').value || '-',
+            nikWali: document.getElementById('nikWali').value || '-'
+        };
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(() => {
+            form.style.display = 'none';
+            successSection.style.display = 'block';
+
+            document.getElementById('resNama').innerText = formData.nama;
+            document.getElementById('resGender').innerText = formData.gender;
+            document.getElementById('resTtl').innerText = formData.tempatLahir + ', ' + formData.tanggalLahir;
+            document.getElementById('resNikSiswa').innerText = formData.nikSiswa;
+            document.getElementById('resAsalSekolah').innerText = formData.asalSekolah;
+            document.getElementById('resNoKk').innerText = formData.noKk;
+            document.getElementById('resAyah').innerText = formData.namaAyah + ' (' + formData.nikAyah + ')';
+            document.getElementById('resIbu').innerText = formData.namaIbu + ' (' + formData.nikIbu + ')';
+            document.getElementById('resWali').innerText = formData.namaWali !== '-' ? formData.namaWali + ' (' + formData.nikWali + ')' : '-';
+            document.getElementById('resWa').innerText = formData.wa;
+
+            document.getElementById('qrcode').innerHTML = "";
+            const statusPageURL = window.location.href.replace('inden.html', 'ceksiswamasuk.html');
+            
+            new QRCode(document.getElementById("qrcode"), {
+                text: statusPageURL,
+                width: 110,
+                height: 110
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        })
+        .catch(error => {
+            alert('Terjadi kesalahan, silakan coba lagi.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Pendaftaran';
+        });
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click', function() {
+        const card = document.getElementById('captureCard');
+        html2canvas(card, { scale: 2 }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Bukti-Online-PPDB.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+    });
+</script>
+
+</body>
+</html>
